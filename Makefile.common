@@ -1,0 +1,104 @@
+#########
+#
+# Common build targets
+#
+#
+
+TOP ?= ../..
+OBJDIR ?= $(TOP)/obj
+LIBDIR ?= $(TOP)/lib
+BINDIR ?= $(TOP)/bin
+
+all: \
+	$(TARGETS-y) \
+	$(foreach O,$(BIN-y),$(BINDIR)/$O) \
+	$(foreach O,$(LIB-y),$(LIBDIR)/$O) \
+
+ifeq ($(shell uname -m),armv7l)
+# We are on the BeagleBone Black itself;
+# do not cross compile.
+export CROSS_COMPILE:=
+export MAC_INCLUDE:=
+
+else
+# We are not on the BeagleBone and might be cross compiling.
+# If the environment does not set CROSS_COMPILE, set our
+# own.  Install a cross compiler with something like:
+#
+# sudo apt-get install gcc-arm-linux-gnueabi
+#
+export CROSS_COMPILE?=arm-linux-gnueabi-
+endif
+
+GENERIC_CFLAGS += \
+	-g \
+	-W \
+	-Wall \
+	-D_BSD_SOURCE \
+	-Wp,-MMD,$(dir $@).$(notdir $@).d \
+	-Wp,-MT,$@ \
+	-I. \
+	-I$(TOP)/src/noise \
+	-I$(TOP)/src/ledscape \
+	-O2 \
+	-mtune=cortex-a8 \
+	-march=armv7-a \
+
+CFLAGS += \
+	-std=c99 \
+	$(GENERIC_CFLAGS) \
+
+CPPFLAGS += \
+	$(GENERIC_CFLAGS) \
+
+LDFLAGS += \
+
+LDLIBS += \
+	-L$(LIBDIR) \
+	-lsdnoise \
+	-lledscape \
+	-lpthread \
+	-lm \
+
+COMPILE.c-o = $(CROSS_COMPILE)gcc $(CFLAGS) -c -o $@ $< 
+COMPILE.cpp-o = $(CROSS_COMPILE)g++ $(CPPFLAGS) -c -o $@ $< 
+COMPILE.a = $(CROSS_COMPILE)ar crv $@ $^ 
+COMPILE.link = $(CROSS_COMPILE)g++ $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+$(OBJDIR)/%.o: %.c
+	$(COMPILE.c-o)
+$(OBJDIR)/%.o: %.cpp
+	$(COMPILE.cpp-o)
+
+$(LIBDIR)/%.a:
+	$(RM) $@
+	$(COMPILE.a)
+
+$(BINDIR)/%:
+	$(COMPILE.link)
+
+#
+# Generate a target for each of the binaries, with dependencies on
+# object files for that source.
+#
+$(foreach O,$(BIN-y),\
+	$(eval $(BINDIR)/$O: $(foreach s,$($O.srcs),$(OBJDIR)/$(basename $s).o) $(LIBDIR)/libledscape.a))
+
+$(foreach O,$(LIB-y),\
+	$(eval $(LIBDIR)/$O: $(foreach s,$($(basename $O).srcs),$(OBJDIR)/$(basename $s).o) $(APP_LOADER_LIB)))
+
+#$(TARGETS):
+	#$(COMPILE.link)
+
+
+.PHONY: clean
+
+# Include all of the generated dependency files
+-include $(OBJDIR)/.*.o.d
+
+clean:
+	rm -rf \
+		$(OBJDIR)/*.o \
+		$(LIBDIR)/*.a \
+		$(OBJDIR)/.*.o.d \
+		$(LIBDIR)/*.bin \
