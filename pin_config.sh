@@ -1,4 +1,9 @@
 #!/bin/bash
+if [[ -e /tmp/pins_hot ]]
+then
+  echo "    GPIO Already configured";
+else
+
 config-pin $(cat /sys/class/gpio/gpio2/label) gpio
 echo out | sudo tee /sys/class/gpio/gpio2/direction
 config-pin $(cat /sys/class/gpio/gpio3/label) gpio
@@ -95,3 +100,6 @@ config-pin $(cat /sys/class/gpio/gpio115/label) gpio
 echo out | sudo tee /sys/class/gpio/gpio115/direction
 config-pin $(cat /sys/class/gpio/gpio117/label) gpio
 echo out | sudo tee /sys/class/gpio/gpio117/direction
+
+touch /tmp/pins_hot
+fi

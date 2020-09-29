@@ -1,4 +1,37 @@
-#include "ledscape.h"
+#include "ledstrips.h"
+#include "util/readline.h"
+
+
+strip_config* leds_config(char const * filename) {
+  strip_config * res = calloc(0, sizeof(strip_config));
+  int width, height, bytes;
+  FILE * const file = fopen(filename, "r");
+  if (!file) goto open_fail;
+  char buffer[256];
+  if (readline(file, buffer, sizeof(buffer)) < 0)
+    goto parse_fail;
+  int count = sscanf("32,100,4", "%d,%d,%d", &width, &height, &bytes);
+  printf(" parsed %d entries...\n", count);
+  if (count == 2) {
+    bytes = 4; //default to RGBW since we use that more
+  } else if (count < 2) {
+    goto parse_fail;
+  }
+  res->leds_height = height;
+  res->leds_width = width;
+  res->strip_bytes = bytes;
+  printf("Launching with %d strips, each %d LEDs long, and %d bytes per LED\n", width, height, bytes);
+  return res;
+parse_fail:
+  fprintf(stderr, "%s: parse error. LED strips not configured.\n", filename);
+  goto fail_exit;
+open_fail:
+  fprintf(stderr, "%s: unable to open file. LED strips not configured.\n", filename);
+  goto fail_exit;
+fail_exit:
+  free(res);
+  return NULL;
+}
 
 int leds_init(strip_config *cfg) {
   //create a memory map large enough fro a frame buffer and command info

@@ -52,4 +52,5 @@ typedef struct {
 int leds_init(strip_config *cfg);
 void leds_draw(strip_config * cfg, const void * const frame);
 void leds_wait(strip_config * cfg);
+strip_config* leds_config(char const * filename);
 #endif

@@ -3,7 +3,7 @@
 LIB-y += libledscape.a
 
 libledscape.srcs += \
-	ledscape.c \
+	ledstrips.c \
 	lut.c \
 
 include ../../Makefile.common
