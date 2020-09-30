@@ -244,7 +244,15 @@ bool should_switch(double clock, double last_switch, int fps, int mode_dur) {
   return elapsed >= mode_dur;
 }
 
+int running = 1;
+
+void exit_handler(int signum) {
+  running = 0;
+}
+
 int main(int argc, char ** argv) {
+  signal(SIGINT, exit_handler);
+  signal(SIGTERM, exit_handler);
   mode_config cfg = parse_args(argc, argv);
   strip_config * config = leds_config(cfg.config_file);
   int w = config->leds_width;
@@ -257,7 +265,7 @@ int main(int argc, char ** argv) {
   double clock = 0;
   double last_switch = 0;
   printf("Entering main loop...\n");
-  while(1) {
+  while(running) {
     uint32_t * fb = calloc(w*h,sizeof(uint32_t));
     if (should_switch(clock, last_switch, FPS, cfg.seconds_per_mode)) {
       last_switch = clock;
@@ -271,4 +279,7 @@ int main(int argc, char ** argv) {
     free(fb);
     clock++;
   }
+  uint32_t * fb = calloc(w*h,sizeof(uint32_t));
+  fill_color(fb, 0, config);
+  leds_draw(config, fb);
 }
