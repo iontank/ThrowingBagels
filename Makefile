@@ -2,6 +2,8 @@ SUBDIR-y += src/ledscape/firmware
 SUBDIR-y += src/noise
 SUBDIR-y += src/ledscape
 SUBDIR-y += src/demos
+SUBDIR-y += src/net
+
 all: 
 	for dir in $(SUBDIR-y); do \
 		$(MAKE) -C $$dir || exit 1; \
