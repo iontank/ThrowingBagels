@@ -52,6 +52,7 @@ int leds_init(strip_config *cfg) {
 
 void leds_draw(strip_config * cfg, const void * const frame) {
   led_command *cmd = cfg->base_addr;
+  cmd->num_pixels = cfg->leds_height; //ensure the client hasn't mucked with the cfg
   memset(cmd->pixels_dma, 0, STRIP_NUM_CHANNELS*cfg->leds_height*cfg->strip_bytes);
   const uint32_t * const in = frame;
   uint8_t * const out = cmd->pixels_dma;
