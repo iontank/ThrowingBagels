@@ -1,3 +1,7 @@
+/**
+ * Simple status program, checks that the PRU firmware is running
+ * in the correct state.
+ **/
 #include <stdio.h>
 #include "ledstrips.h"
 #include "gamma8.h"

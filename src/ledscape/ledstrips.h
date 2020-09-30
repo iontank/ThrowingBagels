@@ -1,5 +1,10 @@
 /** \file
  * Drive up to 32 LED strips on a Beaglebone Black
+ * In addition to this file, you must also include a LUT file,
+ * e.g. your program should start with:
+ * 
+ * #include "ledstrips.h"
+ * #include "gamma8.h"
 **/
 
 #ifndef _ledstrips_h_
@@ -21,7 +26,9 @@
 
 #include "lut.h"
 
+//The maximum number of supported channels
 #define STRIP_NUM_CHANNELS 32
+//the memory location of the PRUs memory
 #define STRIP_BASE_MEM 0x80000000
 
 typedef struct
@@ -46,11 +53,33 @@ typedef struct {
   int leds_width; //X axis, num channels, should be <=32
   int leds_height; //Y axis, LEDs per channel, must be the same on all channels
   uint8_t strip_bytes; //3 or 4
-  void *base_addr; //memory location
+  void *base_addr; //memory location we share with the PRU
 } strip_config;
 
+/**
+ * Initialize the PRU communication. Allocates memory, based on our configuration.
+ **/
 int leds_init(strip_config *cfg);
+/**
+ * Flush a frame (a byte array) to the LEDs. Assumes 24-bit RGB values in 32-bit spaces
+ * i.e., 0x00FFFFFF is full white.
+ * 
+ * This assumes your LEDs are GRB or GRBW
+ **/
 void leds_draw(strip_config * cfg, const void * const frame);
+/**
+ * Wait on the PRU to flush the LED data.
+ * This should not take very long at all, but will
+ * hang indefinitely if the PRU fails for some reason.
+ **/
 void leds_wait(strip_config * cfg);
+/**
+ * Parse a config file.
+ * The config file format is:
+ * WIDTH(num channels),HEIGHT(length of LED strips),bytes (3 or 4, to match your LEDs)
+ * i.e., 32,100,4
+ * 
+ * Strip bytes is optional, 4 is the default
+ **/
 strip_config* leds_config(char const * filename);
 #endif

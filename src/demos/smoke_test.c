@@ -1,3 +1,7 @@
+/**
+ * Literal smoke test: set the LEDs to a (dim) white, then back to black.
+ * Does not use any drawing functions.
+ **/
 #include "ledstrips.h"
 #include "gamma8.h"
 int main() {

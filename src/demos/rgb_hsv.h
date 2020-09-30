@@ -1,3 +1,6 @@
+/**
+ * Color helper functions for RGB<->HSV conversion
+ **/
 #include <stdint.h>
 #ifndef RGB_HSV_H
 #define RGB_HSV_H

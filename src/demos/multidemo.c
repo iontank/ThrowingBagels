@@ -246,7 +246,7 @@ bool should_switch(double clock, double last_switch, int fps, int mode_dur) {
 
 int running = 1;
 
-void exit_handler(int signum) {
+void exit_handler(__attribute__((unused)) int signum) {
   running = 0;
 }
 

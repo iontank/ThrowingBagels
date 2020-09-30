@@ -1,7 +1,7 @@
 #########
 #
 # Common build targets
-#
+# This file was lifted from the original LEDScape: https://github.com/osresearch/LEDscape
 #
 
 TOP ?= ../..
@@ -34,7 +34,7 @@ GENERIC_CFLAGS += \
 	-g \
 	-W \
 	-Wall \
-	-D_BSD_SOURCE \
+	-D_DEFAULT_SOURCE \
 	-Wp,-MMD,$(dir $@).$(notdir $@).d \
 	-Wp,-MT,$@ \
 	-I. \

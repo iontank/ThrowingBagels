@@ -1,3 +1,8 @@
+/**
+ * Demo Modes
+ * These methods allow test programs to quickly and easily send data to LEDs.
+ * Useful for disconnected idle modes, demonstrations, or hardware testing/profiling.
+ **/
 #include <stdio.h>
 #include <stdlib.h>
 #include "sdnoise.h"
@@ -13,6 +18,9 @@
 #define blue(c) ((c & 0x0000FF))
 #define color(r,g,b) (((uint8_t)r << 16) | ((uint8_t)g << 8) | ((uint8_t)b))
 
+/**
+ * Blend: mix two colors using a weight (from 0-1)
+ **/
 uint32_t blend(uint32_t l, uint32_t q, double weight) {
 	double w = fabs(weight);
 	double r = red(l) * (1.0 - w) + red(q) * w;
@@ -21,6 +29,9 @@ uint32_t blend(uint32_t l, uint32_t q, double weight) {
 	return color(r, g, b);
 }
 
+/**
+ * fill_frame: fill the framebuffer using an `rgb_color` struct
+ **/
 void fill_frame(uint32_t * fb, 
                   rgb_color rgb, strip_config * config) {
   int w = config->leds_width;
@@ -31,6 +42,9 @@ void fill_frame(uint32_t * fb,
   }
 }
 
+/**
+ * fill_color: fill the frame using a 32-bit RGB value
+ */
 void fill_color(uint32_t * fb, uint32_t rgb, strip_config * config) {
   uint32_t color = rgb;
   int w = config->leds_width;
@@ -40,6 +54,9 @@ void fill_color(uint32_t * fb, uint32_t rgb, strip_config * config) {
   }
 }
 
+/**
+ * perform a hue rotation animation based on the `clock` time
+ */
 void hue_rotation(uint32_t * fb, 
                   uint32_t clock,
                   strip_config * config,
@@ -52,6 +69,9 @@ void hue_rotation(uint32_t * fb,
   fill_frame(fb, rgb, config);
 }
 
+/**
+ * Ramp between main_color and accent_color, using the clock time and a speed multiplier
+ */
 void ramp(uint32_t * fb, uint32_t clock, strip_config * config,
           uint32_t main_color, uint32_t accent_color, double speed) {
   double progress = fmod(clock, speed) / speed;
@@ -59,6 +79,10 @@ void ramp(uint32_t * fb, uint32_t clock, strip_config * config,
   fill_color(fb, rgb, config);
 }
 
+/**
+ * Perform a stripwise pulse animation, with a main color flying over
+ * an accent color, with a pulse of a certain size and moving ata certain speed
+ **/
 void pulse(uint32_t * fb, uint32_t clock, strip_config * config,
           uint32_t main_color, uint32_t accent_color,
           double size, double speed) {
@@ -76,6 +100,9 @@ void pulse(uint32_t * fb, uint32_t clock, strip_config * config,
   }
 }
 
+/**
+ * Play sinusoidal noise, between two colors, with a size/speed scale factor
+ **/ 
 void sinusoidal(uint32_t * fb, uint32_t clock, strip_config * config,
                  uint32_t primary, uint32_t accent, 
                  double space_scale, double time_scale) {
@@ -90,6 +117,9 @@ void sinusoidal(uint32_t * fb, uint32_t clock, strip_config * config,
   }
 }
 
+/**
+ * Play a perlin noise animation
+ */
 void noise_field(uint32_t * fb, uint32_t clock, strip_config * config, double space_scale, double time_scale) {
   int w = config->leds_width;
   int h = config->leds_height;

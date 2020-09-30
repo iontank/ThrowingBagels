@@ -1,3 +1,6 @@
+/**
+ * Readline helper method: read a single line out of a file, stripping whitespace
+ **/
 static ssize_t
 readline(
 	FILE * const file,
