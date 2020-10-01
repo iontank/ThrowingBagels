@@ -138,14 +138,16 @@ int main_loop(strip_config * cfg, int sock, int timeout) {
     }
     if (rc == 0) {
       //we've timed out waiting for a packet
+      printf("Rendering idle frame...\n");
       IDLE_MODE(frame_buf, cfg, clock);
       leds_draw(cfg, frame_buf);
-      clock += 0.250;
+      clock += 0.0250;
       t_val = 250;
       continue;
     }
 
     //we've got data
+    printf("Rendering frame...\n");
     t_val = timeout;
     const ssize_t rlen = recv(sock, packet_buf, frame_size, 0);
     if (rlen < 0) {
@@ -163,8 +165,9 @@ int main_loop(strip_config * cfg, int sock, int timeout) {
         *out = (in[0] << 16) | (in[1] << 8) | (in[2] << 0);
       }
     }
-    leds_draw(cfg, frame_buf);
-    leds_wait(cfg);
+    if (frame_part == 1) {
+      leds_draw(cfg, frame_buf);
+    }
   }
   fill_color(frame_buf, 0, cfg);
   leds_draw(cfg, frame_buf);

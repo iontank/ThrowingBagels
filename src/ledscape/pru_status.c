@@ -10,6 +10,7 @@ int main() {
   strip_config cfg;
   leds_init(&cfg);
   led_command * cmd = cfg.base_addr;
+  printf("dbg: %#08x, %#08x\n", cmd->debug0, cmd->debug1);
   switch(cmd->debug0) {
     case 1:
       printf("Starting...\n");

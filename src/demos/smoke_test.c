@@ -19,13 +19,18 @@ int main() {
   }
   printf("Sending white.\n");
   cmd->command = 1;
-  leds_wait(&cfg);
-  sleep(10);
+  for (int i = 0; i < 10; i++) {
+    printf("%d: dbg: %#08x, %#08x\n", 10-i, cmd->debug0, cmd->debug1);
+    sleep(1);
+  }
   printf("Sending black.\n");
   for (int i = 0; i < 100 * 32 * 4; i++) {
     cmd->pixels_dma[i] = 0;
   }
   cmd->command = 1;
-  leds_wait(&cfg);
+    for (int i = 0; i < 10; i++) {
+    printf("%d: dbg: %#08x, %#08x\n", 10-i, cmd->debug0, cmd->debug1);
+    sleep(1);
+  }
   printf("Done\n");
 }
