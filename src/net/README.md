@@ -26,4 +26,29 @@ The first byte needs to be the "index" of this packet- 0 means it contains the f
 The rest of the data is 24-bit raw RGB data.
 
 ## Sample Network Client
-**TODO**: add a dumb Python image sender
+[A Python sample client](../../python/) demonstrates how to send RGB data from another application to one or more Beaglebones.
+
+## Example Network Layout
+<pre>
+                                          +------------+    +--------------------------+
++---------+                   +---------->+  bagelbox  +--->+up to 32 channels of LEDs |
+|         |     udp           |           +------------+    +--------------------------+
+| Render  +-------------------+
+| Machine |                   |           +------------+    +--------------------------+
+|         |                   +---------->+  bagelbox  +--->+up to 32 channels of LEDs |
++---------+                   |           +------------+    +--------------------------+
+                              |
+                              |           +------------+    +--------------------------+
+                              +---------->+  bagelbox  +--->+up to 32 channels of LEDs |
+                              |           +------------+    +--------------------------+
+                              |
+                              |           +------------+    +--------------------------+
+                              +---------->+  bagelbox  +--->+up to 32 channels of LEDs |
+                                          +------------+    +--------------------------+
+</pre>
+
+The "Render Machine" may be pretty much *anything*. We've built frame generators in Unity, Python, C/C++, Processing. Anything that can construct an RGB frame and send it across the network. See the [Python sample](../../python) to get a sense of how this works.
+
+The render machine must generate a frame using any technique you like, and then assign segments of that frame to Beaglebones, slice out the relevant segments, and then send them over the network via UDP.
+
+Bagelboxes are Beaglebones running the ThrowingBagels LED-UDP-RX. This allows for synchronized drawing across an arbitrary number of Beaglebones, with an arbitrary number of LEDs. The maximum size of your LED installation is limited only by the performance of your renderer.

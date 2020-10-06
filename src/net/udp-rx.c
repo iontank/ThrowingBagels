@@ -20,7 +20,7 @@
 
 #include "gamma8.h"
 
-#define IDLE_MODE(buf,cfg,tick) sinusoidal(buf, tick, cfg, 0xFF00FF, 0x00FFFF, 0.34, 100.0)
+#define IDLE_MODE(buf,cfg,tick) sinusoidal(buf, tick, cfg, 0xFF00FF, 0x00FFFF, 0.34, 50.0)
 
 static int
 udp_socket(
@@ -131,23 +131,19 @@ int main_loop(strip_config * cfg, int sock, int timeout) {
   while(running) {
     int rc = wait_socket(sock, t_val);
     if (rc < 0) {
-      //read failed
       fill_color(frame_buf, 0, cfg);
       leds_draw(cfg, frame_buf);
       return 900;
     }
     if (rc == 0) {
       //we've timed out waiting for a packet
-      printf("Rendering idle frame...\n");
       IDLE_MODE(frame_buf, cfg, clock);
       leds_draw(cfg, frame_buf);
+      leds_wait(cfg);
       clock += 0.0250;
       t_val = 250;
       continue;
     }
-
-    //we've got data
-    printf("Rendering frame...\n");
     t_val = timeout;
     const ssize_t rlen = recv(sock, packet_buf, frame_size, 0);
     if (rlen < 0) {

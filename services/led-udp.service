@@ -1,0 +1,11 @@
+[Unit]
+Description=ThowringBagels UDP Receiver
+
+[Service]
+WorkingDirectory=/opt/ThrowingBagels
+ExecStart=/opt/ThrowingBagels/launcher bin/led-udp-rx
+KillMode=control-group
+After=bagel-launcher
+
+[Install]
+WantedBy=multi-user.target

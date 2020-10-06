@@ -1,0 +1,4 @@
+#/usr/bin/env bash
+cp services/*.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable bagel-launcher

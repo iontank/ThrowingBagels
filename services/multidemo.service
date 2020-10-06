@@ -1,0 +1,11 @@
+[Unit]
+Description=Throwing Bagels Multidemo
+
+[Service]
+WorkingDirectory=/opt/ThrowingBagels
+ExecStart=/opt/ThrowingBagels/launcher bin/multidemo
+KillMode=control-group
+After=bagel-launcher
+
+[Install]
+WantedBy=multi-user.target

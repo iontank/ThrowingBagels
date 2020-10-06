@@ -8,7 +8,14 @@ You can use ThrowingBagels to drive up to 32 channels of individual LED strips, 
 ## Installing
 Clone the repo onto a BeagleBone. You should be able to run `make` on a fresh BeagleBone Black, running Debian Buster, and it will build all the required software components.
 
-**TODO**: example service files will be included, to run this as a service
+### Running as Services
+The primary use case is going to be running this as a UDP listener, but there are a few options for running services. The service scripts all assume that you've placed this code at `/opt/ThrowingBagels`, and we recommend that your primary user account is the owner of that folder.
+
+Run `sudo ./setup_services` to deploy all the service configurations in the `services` folder. (Feel free to add your own there for your custom software).
+
+This will automatically enable `bagel-launcher` to run at boot. `bagel-launcher` will configure the appropriate pins and deploy the ledscape firmware which actually drives the LEDs.
+
+You can then `sudo systemctl start led-udp` or `sudo systemctl start multidemo` to launch the LED UDP RX or Multidemo programs, respectively. Enable/Disable them to have them launch at boot. See below for more details on these programs and how to configure them.
 
 ## Included Application
 ### PRU Firmware

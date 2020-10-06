@@ -1,0 +1,10 @@
+[Unit]
+Description=Throwing Bagels Launcher
+
+[Service]
+WorkingDirectory=/opt/ThrowingBagels
+ExecStart=/opt/ThrowingBagels/launcher
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
