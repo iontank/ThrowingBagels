@@ -1,11 +1,11 @@
 [Unit]
-Description=ThowringBagels UDP Receiver
+Description=ThrowingBagels UDP Receiver
+After=proc-sys-fs-binfmt_misc.automount
 
 [Service]
 WorkingDirectory=/opt/ThrowingBagels
 ExecStart=/opt/ThrowingBagels/launcher bin/led-udp-rx
 KillMode=control-group
-After=bagel-launcher
 
 [Install]
 WantedBy=multi-user.target

@@ -6,16 +6,23 @@ You can use ThrowingBagels to drive up to 32 channels of individual LED strips, 
 **TODO**: example PCB will be included
 
 ## Installing
-Clone the repo onto a BeagleBone. You should be able to run `make` on a fresh BeagleBone Black, running Debian Buster, and it will build all the required software components.
+Clone the repo onto a BeagleBone. The best place to put it is `/opt/ThrowingBagels`, and that's what the service files assume. You should be able to run `make` on a fresh BeagleBone Black, running Debian Buster, and it will build all the required software components.
 
 ### Running as Services
-The primary use case is going to be running this as a UDP listener, but there are a few options for running services. The service scripts all assume that you've placed this code at `/opt/ThrowingBagels`, and we recommend that your primary user account is the owner of that folder.
+The primary use case is going to be running this as a UDP listener, but there are a few options for running services.
 
 Run `sudo ./setup_services` to deploy all the service configurations in the `services` folder. (Feel free to add your own there for your custom software).
 
-This will automatically enable `bagel-launcher` to run at boot. `bagel-launcher` will configure the appropriate pins and deploy the ledscape firmware which actually drives the LEDs.
+This installs, but does not enable any service files. 
 
-You can then `sudo systemctl start led-udp` or `sudo systemctl start multidemo` to launch the LED UDP RX or Multidemo programs, respectively. Enable/Disable them to have them launch at boot. See below for more details on these programs and how to configure them.
+The first is `bagel-launcher.service`, which simply installs the firmware and configures GPIO at boot. It's potentially useful for testing if you plan to interactively run your own software.
+
+The second is `multidemo.service`, which runs the multidemo application (see below).
+
+The third is the main application, `led-udp.service`, which runs the LED UDP RX program, and is the primary tool you'll likely use to control LEDs.
+
+#### Enable the Appropriate Service
+For your usecase, you'll need to `sudo systemctl enable $SERVICE`, where `$SERVICE` is one of the above. You can then `sudo systemctl start $SERVICE`.
 
 ## Included Application
 ### PRU Firmware

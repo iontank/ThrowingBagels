@@ -3,7 +3,7 @@ if [[ -e /tmp/pins_hot ]]
 then
   echo "    GPIO Already configured";
 else
-
+echo "Setting up GPIO"
 config-pin $(cat /sys/class/gpio/gpio2/label) gpio
 echo out | sudo tee /sys/class/gpio/gpio2/direction
 config-pin $(cat /sys/class/gpio/gpio3/label) gpio

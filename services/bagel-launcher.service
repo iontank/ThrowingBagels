@@ -1,11 +1,11 @@
 [Unit]
 Description=Throwing Bagels Launcher
+After=proc-sys-fs-binfmt_misc.automount
 
 [Service]
 WorkingDirectory=/opt/ThrowingBagels
 ExecStart=/opt/ThrowingBagels/launcher
 KillMode=control-group
-After=proc-sys-fs-binfmt_misc.automount
 
 [Install]
 WantedBy=multi-user.target
