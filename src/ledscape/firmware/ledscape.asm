@@ -226,7 +226,7 @@ _LOOP:
 
   DATA_RECVD
 
-  SBCO    &t6, DDR, CHANNELS, 1 ; check how many bytes we have
+  LBCO    &t6, DDR, CHANNELS, 1 ; check how many bytes we have
 
   LDI32   length, 0
   ; length is in pixels, so let's convert it to bytes
