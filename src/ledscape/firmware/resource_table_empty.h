@@ -53,10 +53,15 @@
 #include <stddef.h>
 #include <rsc_types.h>
 
+#define STRIP_DA 0x80000000
+#define STRIP_PA 0x80000000
+#define STRIP_MEM_SIZE 512*32*4
+
 struct my_resource_table {
 	struct resource_table base;
 
 	uint32_t offset[1]; /* Should match 'num' in actual definition */
+	struct fw_rsc_carveout shared_mem;
 };
 
 #pragma DATA_SECTION(pru_remoteproc_ResourceTable, ".resource_table")
@@ -65,7 +70,12 @@ struct my_resource_table pru_remoteproc_ResourceTable = {
 	1,	/* we're the first version that implements this */
 	0,	/* number of entries in the table */
 	0, 0,	/* reserved, must be zero */
-	0,	/* offset[0] */
+	{ offsetof(struct my_resource_table, shared_mem) },
+	{
+		TYPE_CARVEOUT,
+		STRIP_DA, STRIP_PA,
+		STRIP_MEM_SIZE, 0, 0, "Strip shared memory"
+	},
 };
 
 #endif /* _RSC_TABLE_PRU_H_ */
