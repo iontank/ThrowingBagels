@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+echo "This script will scan your pin layout file and ensure that the kernel IDs map to the labels"
+echo "It's just a sanity check, it does not actually mean your pin config is valid."
+if [[ -z $1 ]] 
+then
+  echo "Specify the pin layout file you want to validate"
+  exit
+fi;
+
+cat "$1" | while read line;
+do
+  row=(${line//,/ })
+  tag=`cat /sys/class/gpio/gpio${row[3]}/label`
+  if [[ ${row[2]} != $tag ]]
+  then
+    echo "Expected layout doesn't match for line '$line'"
+    echo "Got $tag, expected ${row[2]}"
+    exit 10
+  fi
+done
+echo "Pin config is sane."

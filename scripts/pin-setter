@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+line=$1
+row=(${line//,/ })
+echo "-----------------"
+config-pin ${row[2]} gpio
+echo out | sudo tee "/sys/class/gpio/gpio${row[3]}/direction"
+echo "Set ${row[2]}"
+echo "-----------------"

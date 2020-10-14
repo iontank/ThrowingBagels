@@ -3,7 +3,8 @@
 stop_firmware() {
   echo stop | sudo tee ${PRU0}/state > /dev/null 2> /dev/null
 }
-bash pin_config.sh > /dev/null 2> /dev/null
+echo "Starting GPIO setup"
+scripts/pin-config > /dev/null 2> /dev/null
 PRU0=/sys/class/remoteproc/remoteproc1
 TARGET=gen/ledscape.out
 if [[ -e /tmp/ledscape_deployed ]]

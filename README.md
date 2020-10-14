@@ -41,6 +41,8 @@ The primary application, and what drives the core use-case of this software stac
 ## Running
 Included is a `launcher` script. This script configures the GPIO, deploys the firmware, and then, optionally, launches a requested binary. E.g., `./launcher bin/led-udp-rx`, would launch the LED UDP RX tool on port 9999, using `leds.config` as the source for our led configuration.
 
+**Important launching tips**: we do some naughty things with memory. **If you haven't launched the firmware before starting your application software, BAD THINGS WILL HAPPEN.** The launcher only needs to be run once, but it *must* be run.
+
 ### On Configuration
 Many of the tools, like `led-udp-rx` and `multidemo`, expect an LED configuration to be supplied. By default, they check `leds.config`, but they both take a command line flag to change that. The file MUST be a single line, in this format:
 

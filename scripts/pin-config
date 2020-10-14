@@ -1,0 +1,18 @@
+#!/bin/bash
+if [[ -z $1 ]]
+then
+  INFILE="./scripts/pin_layout.txt"
+else
+  INFILE=$1
+fi
+
+if [[ -e /tmp/pins_hot ]]
+then
+  echo "    GPIO Already configured";
+else
+
+echo "Setting up GPIO"
+xargs -a "$INFILE" -L1 scripts/pin-setter
+fi
+
+touch /tmp/pins_hot
