@@ -1,2 +1,6 @@
 *.pyc
 test.json
+obj/*
+bin/*
+lib/*
+gen/*
