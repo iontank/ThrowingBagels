@@ -4,7 +4,7 @@ After=proc-sys-fs-binfmt_misc.automount
 
 [Service]
 WorkingDirectory=/opt/ThrowingBagels
-ExecStart=./launcher bin/multidemo
+ExecStart=/opt/ThrowingBagels/launcher bin/multidemo
 KillMode=control-group
 
 [Install]
