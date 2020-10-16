@@ -40,10 +40,11 @@ else
   echo "$w,$h,$b" > leds.config
 fi
 
-echo "Backing up your original uBoot config to `/boot/uEnv.txt.old`"
-sudo cp /boot/uEnv.txt /boot/uEnv.txt.old
+echo "Backing up your original uBoot config to /boot/uEnv.txt.old"
+sudo mv /boot/uEnv.txt /boot/uEnv.txt.old
 echo "Installing the bagel uBoot config."
 sudo cp scripts/uEnv.txt /boot/uEnv.txt
+echo "Throwing Bagels has been installed. Services are installed, but not enabled. Check the READMe for more."
 
 
 
