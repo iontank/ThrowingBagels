@@ -3,5 +3,6 @@ sudo git clone https://rna.iontank.com/iontank/blinkyblink /opt/ThrowingBagels #
 USER=$(whoami)
 sudo chown -R $USER /opt/ThrowingBagels
 cd /opt/ThrowingBagels
+make
 sudo ./setup_services
 sudo ./provision.sh

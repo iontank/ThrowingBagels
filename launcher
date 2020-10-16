@@ -24,5 +24,6 @@ touch /tmp/ledscape_deployed
 # run any commands within the launcher context
 if [[ "$#" -gt 0 ]]
 then
+  echo "Launching client '$@'"
   sudo "$@"
 fi
