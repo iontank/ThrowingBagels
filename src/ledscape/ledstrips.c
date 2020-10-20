@@ -35,7 +35,7 @@ fail_exit:
 
 int leds_init(strip_config *cfg) {
   //create a memory map large enough fro a frame buffer and command info
-  size_t map_size = cfg->leds_height * STRIP_NUM_CHANNELS * cfg->strip_bytes + sizeof(led_command);
+  size_t map_size = 132072; //big ol' pile of memory
   unsigned long map_mask = (map_size - 1);
   off_t target = STRIP_BASE_MEM;
   void *map_base;
@@ -45,6 +45,10 @@ int leds_init(strip_config *cfg) {
   map_base = mmap(0, map_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target & ~map_mask);
   cfg->base_addr = map_base + (target & map_mask);
   led_command *ptr = cfg->base_addr;
+  if (ptr->debug0 != 2) {
+    fprintf(stderr,"The firmware isn't in a state to receive commands. Ensure it's loaded and no other programs are trying to talk to it.");
+    return 0;
+  }
   ptr->pixels_dma = cfg->base_addr + sizeof(led_command);
   memset(ptr->pixels_dma, 0, STRIP_NUM_CHANNELS * cfg->leds_height * cfg->strip_bytes);
   return 1;
