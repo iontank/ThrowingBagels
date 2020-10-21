@@ -10,7 +10,7 @@ strip_config* leds_config(char const * filename) {
   char buffer[256];
   if (readline(file, buffer, sizeof(buffer)) < 0)
     goto parse_fail;
-  int count = sscanf("32,100,4", "%d,%d,%d", &width, &height, &bytes);
+  int count = sscanf(buffer, "%d,%d,%d", &width, &height, &bytes);
   printf(" parsed %d entries...\n", count);
   if (count == 2) {
     bytes = 4; //default to RGBW since we use that more
