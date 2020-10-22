@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+kern=`uname -r`
+echo "Your kernel is ${kern}. This installer works for 4.19 kernels."
 read -p "Press [Enter] to provision this Bagelbox for network rendering."
 echo "What hostname would you like this Bagelbox to use? "
 read -p "[HOST] > "  hostval
@@ -24,12 +26,19 @@ case $b in
     ;;
 esac
 
+if [[ $h -gt 512 ]]
+then
+  echo "Too many leds per channel- 512 is thee max. No changes have beeen made."
+  exit
+fi
+
 if [[ -z $hostval ]]
 then
   echo "You didn't supply a host name. Not setting one. Re-run provision.sh or change the hostname yourself."
 else
   echo "Setting hostname to $hostval."
   echo $hostval | sudo tee /etc/hostname
+  sudo sed -i.bak "s/localhost/localhost $hostval/" /etc/hosts
 fi
 
 if [[ -z $w ]] || [[ -z $h ]] || [[ -z $b ]]
@@ -40,11 +49,19 @@ else
   echo "$w,$h,$b" > leds.config
 fi
 
-echo "Backing up your original uBoot config to /boot/uEnv.txt.old"
-sudo mv /boot/uEnv.txt /boot/uEnv.txt.old
 echo "Installing the bagel uBoot config."
-sudo cp scripts/uEnv.txt /boot/uEnv.txt
+sudo sed -i.bak "s/#disable_uboot_overlay_video=1/disable_uboot_overlay_video=1/g" /boot/uEnv.txt
+sudo sed -i.bak "s/#disable_uboot_overlay_audio=1/disable_uboot_overlay_audio=1/g" /boot/uEnv.txt
+
+echo "Updating the device tree."
+sudo cp dts/*.dtbo /lib/firmware
+
+echo "This script assumes that your uEnv.txt enables the PRU, which should be the default. Ensure that a uboot_overlay_pru is set."
+echo "If not, manually change it."
+
+echo "Installing services"
+sudo scripts/setup_services
+
 echo "Throwing Bagels has been installed. Services are installed, but not enabled. Check the READMe for more."
-
-
-
+echo "Please reboot before trying the included software."
+echo "After a reboot, you can use systemctl to enable/start either multidemo or led-udp"

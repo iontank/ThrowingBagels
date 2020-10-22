@@ -4,5 +4,5 @@ USER=$(whoami)
 sudo chown -R $USER /opt/ThrowingBagels
 cd /opt/ThrowingBagels
 make
-sudo ./setup_services
-sudo ./provision.sh
+
+echo "From /opt/ThrowingBagels run scripts/provision to complete the installation."

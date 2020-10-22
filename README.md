@@ -1,25 +1,34 @@
 # ThrowingBagels
 **ThrowingBagels** is a modernization of the [LEDScape](https://github.com/osresearch/LEDscape) software package. ThrowingBagels a LED driver software package for the ~~bagelbone~~ BeagleBone Black, which drives LEDs from UDP packets you yeet at it over the network, or from your own custom software.
 
-You can use ThrowingBagels to drive up to 32 channels of individual LED strips, of whatever length you can drive power to. This should work on any BeagleBone Black, running Debian Buster.
+You can use ThrowingBagels to drive up to 32 channels of individual LED strips, up to 512 LEDs per channel. This should work on any BeagleBone Black, running Debian Buster.
 
 **TODO**: example PCB will be included
 
 ## Installing
-Clone the repo onto a BeagleBone. The best place to put it is `/opt/ThrowingBagels`, and that's what the service files assume. You should be able to run `make` on a fresh BeagleBone Black, running Debian Buster, and it will build all the required software components.
+`curl https://raw.githubusercontent.com/Iontank/ThrowingBagels/install.sh | bash`
+
+This script will:
+
+* Clone ThrowingBagels into `/opt/ThrowingBagels`
+* Grant ownership of that directory to the current user (probably `debian`)
+* Build the code
+* Provision the Beaglebone
+  * Create the leds.config file
+  * Change the hostname
+  * Update the `/boot/uEnv.txt` to disable HDMI and audio (we need those GPIO pins)
+  * Install, but not enable, the systemd services for core applications
 
 ### Running as Services
 The primary use case is going to be running this as a UDP listener, but there are a few options for running services.
-
-Run `sudo ./setup_services` to deploy all the service configurations in the `services` folder. (Feel free to add your own there for your custom software).
-
-This installs, but does not enable any service files. 
 
 The first is `bagel-launcher.service`, which simply installs the firmware and configures GPIO at boot. It's potentially useful for testing if you plan to interactively run your own software.
 
 The second is `multidemo.service`, which runs the multidemo application (see below).
 
 The third is the main application, `led-udp.service`, which runs the LED UDP RX program, and is the primary tool you'll likely use to control LEDs.
+
+After install, all of these services will be installed, but none of them will be enabled.
 
 #### Enable the Appropriate Service
 For your usecase, you'll need to `sudo systemctl enable $SERVICE`, where `$SERVICE` is one of the above. You can then `sudo systemctl start $SERVICE`.
@@ -31,7 +40,7 @@ The main driver of everything is the PRU Firmware, `ledscape.asm`. This is what 
 ### Demo Applications
 For the purposes of testing, iterating, and diagnosing hardware issues, there are several included demo applications.
 
-* `bin/smoke`(`src/demos/smoke_test.c`): a simple smoke test application which sets the LEDs to a "soft-white" for ten seconds, and then back to black. It is the "hello world" of ThrowingBagels applications.
+* `bin/smoke`(`src/demos/smoke_test.c`): a simple smoke test application which sets the LEDs to a "soft-white" for ten seconds, and then back to black. It is the "hello world" of ThrowingBagels applications. (We don't go to full white, because that can overload many power supplies/distribution boards)
 * `bin/pru_status`(`src/ledscape/pru_status.c`): a simple tool which checks the status of the PRU firmware.
 * `bin/multidemo`(`src/demos/multidemo.c`): a complex and highly configurable suite of animations which run right on the BeagleBone, useful for demonstrating lighting effects without network connectivity. Great "pitch tool" to prove hardware concepts.
 
@@ -40,8 +49,6 @@ The primary application, and what drives the core use-case of this software stac
 
 ## Running
 Included is a `launcher` script. This script configures the GPIO, deploys the firmware, and then, optionally, launches a requested binary. E.g., `./launcher bin/led-udp-rx`, would launch the LED UDP RX tool on port 9999, using `leds.config` as the source for our led configuration.
-
-**Important launching tips**: we do some naughty things with memory. **If you haven't launched the firmware before starting your application software, BAD THINGS WILL HAPPEN.** The launcher only needs to be run once, but it *must* be run.
 
 ### On Configuration
 Many of the tools, like `led-udp-rx` and `multidemo`, expect an LED configuration to be supplied. By default, they check `leds.config`, but they both take a command line flag to change that. The file MUST be a single line, in this format:
@@ -52,7 +59,11 @@ e.g.:
 
 `32,100,4`: this would drive 32 channels of output, for strips 100 pixels long, and expects each LED to need 4 bytes (an RGBW LED). For LED UDP RX, this also sets the expected packet size- each packet should contain 50 pixels for all 32 channels (see [the UDP RX Readme](src/net/README.md) for more details).
 
+`scripts/provision` will also prompt you for this information during the install.
+
 
 ## Your own ThrowingBagles software
 To build your own application running on the BeagleBone, you must include two files. First, you need to include `ledstrips.h` into your C code, and you must include a LUT: either `gamma8.h` (recommended), `linear.h`, or your own custom LUT.
+
+From there, you need to flatten your frames into a stripwise structure, e.g. you should be able to access individual pixels using `fb[(y*w)+x]` (that access the pixel at the given x/y coordinate in a 1D version of your framebuffer). See [modes.h](src/demos/modes.h) for examples.
 
