@@ -32,5 +32,6 @@ int main() {
     printf("%d: dbg: %#08x, %#08x\n", 10-i, cmd->debug0, cmd->debug1);
     sleep(1);
   }
+  leds_close(&cfg);
   printf("Done\n");
 }

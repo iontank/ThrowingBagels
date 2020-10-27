@@ -167,5 +167,6 @@ int main_loop(strip_config * cfg, int sock, int timeout) {
   }
   fill_color(frame_buf, 0, cfg);
   leds_draw(cfg, frame_buf);
+  leds_close(cfg);
   return 0;
 }

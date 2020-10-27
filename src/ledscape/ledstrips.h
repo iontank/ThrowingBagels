@@ -30,6 +30,9 @@
 #define STRIP_NUM_CHANNELS 32
 //the memory location of the PRUs memory
 #define STRIP_BASE_MEM 0x80000000
+//the amount of memory we want to reserve, which is more than we
+//reasonably plan to use
+#define STRIP_MEM_SIZE 132072
 
 typedef struct
 {
@@ -82,4 +85,9 @@ void leds_wait(strip_config * cfg);
  * Strip bytes is optional, 4 is the default
  **/
 strip_config* leds_config(char const * filename);
+
+/**
+ * Release the memory that we're using to share with the PRU
+ **/
+void leds_close(strip_config * cfg);
 #endif

@@ -282,4 +282,5 @@ int main(int argc, char ** argv) {
   uint32_t * fb = calloc(w*h,sizeof(uint32_t));
   fill_color(fb, 0, config);
   leds_draw(config, fb);
+  leds_close(config);
 }

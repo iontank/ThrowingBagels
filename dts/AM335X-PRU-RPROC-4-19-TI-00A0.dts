@@ -33,6 +33,16 @@
   fragment@1 {
     target-path="/";
     __overlay__ {
+      reserved-memory {
+        #address-cells = <1>;
+		    #size-cells = <1>;
+		    ranges;
+        ledbuff: ledmem@80000000 {
+          #address-cells = <1>;
+          #size-cells = <1>;
+          reg = <0x80000000 0x100000>;
+        };
+      };
 
       ocp {
         #address-cells = <1>;

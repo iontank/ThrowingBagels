@@ -31,5 +31,6 @@ int main() {
       printf("Unknown PRU State\n");
       break;
   }
+  leds_close(&cfg);
   return 0;
 }

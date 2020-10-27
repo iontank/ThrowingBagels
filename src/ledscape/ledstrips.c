@@ -35,29 +35,29 @@ fail_exit:
 
 int leds_init(strip_config *cfg) {
   //create a memory map large enough fro a frame buffer and command info
-  size_t map_size = 132072; //big ol' pile of memory
-  unsigned long map_mask = (map_size - 1);
+  size_t map_size = STRIP_MEM_SIZE; //big ol' pile of memory
   off_t target = STRIP_BASE_MEM;
+  off_t pa_target = target & ~(sysconf(_SC_PAGE_SIZE) - 1); //page aligned target
   void *map_base;
   int fd;
   //open memory
   if ((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1) return 0;
-  map_base = mmap(0, map_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target & ~map_mask);
-  cfg->base_addr = map_base + (target & map_mask);
+  map_base = mmap(0, map_size + target - pa_target, PROT_READ | PROT_WRITE, MAP_SHARED, fd, pa_target);
+  cfg->base_addr = map_base + target - pa_target;
+  mlock(cfg->base_addr, map_size);
   led_command *ptr = cfg->base_addr;
   if (ptr->debug0 != 2) {
     fprintf(stderr,"The firmware isn't in a state to receive commands. Ensure it's loaded and no other programs are trying to talk to it.");
     return 0;
   }
   ptr->pixels_dma = cfg->base_addr + sizeof(led_command);
-  memset(ptr->pixels_dma, 0, STRIP_NUM_CHANNELS * cfg->leds_height * cfg->strip_bytes);
+  close(fd);
   return 1;
 }
 
 void leds_draw(strip_config * cfg, const void * const frame) {
   led_command *cmd = cfg->base_addr;
   cmd->num_pixels = cfg->leds_height; //ensure the client hasn't mucked with the cfg
-  memset(cmd->pixels_dma, 0, STRIP_NUM_CHANNELS*cfg->leds_height*cfg->strip_bytes);
   const uint32_t * const in = frame;
   uint8_t * const out = cmd->pixels_dma;
   const unsigned pru_stride = STRIP_NUM_CHANNELS;
@@ -81,4 +81,9 @@ void leds_wait(strip_config * cfg) {
   led_command *cmd = cfg->base_addr;
   while (cmd->response == 0);
   cmd->response = 0;
+}
+
+void leds_close(strip_config * cfg) {
+  munlockall();
+  munmap(cfg->base_addr, STRIP_MEM_SIZE);
 }
