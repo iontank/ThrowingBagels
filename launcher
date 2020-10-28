@@ -7,6 +7,13 @@ echo "Starting GPIO setup"
 scripts/pin-config > /dev/null 2> /dev/null
 PRU0=/sys/class/remoteproc/remoteproc1
 TARGET=gen/ledscape.out
+
+while [[ ! -f ${PRU0}/state ]]
+do
+  echo "Waiting for PRU…"
+  sleep 0.75
+done
+
 if [[ -e /tmp/ledscape_deployed ]]
 then
   echo "LEDScape already deployed"
