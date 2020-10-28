@@ -12,7 +12,7 @@ then
 else
 
 echo "Setting up GPIO"
-xargs -a "$INFILE" -L1 scripts/pin-setter
+xargs -a "$INFILE" -L1 -P0 scripts/pin-setter
 fi
 
 touch /tmp/pins_hot
