@@ -19,6 +19,22 @@ shmem@4a300000 {
 };
 ```
 
+And we also need to create a `reserved-memory` key for the same area:
+
+```
+reserved-memory {
+  #address-cells = <1>;
+  #size-cells = <1>;
+  ranges;
+  ledbuff: ledmem@80000000 {
+    #address-cells = <1>;
+    #size-cells = <1>;
+    reg = <0x80000000 0x100000>;
+  };
+};
+```
+
+
 Currently, this is done by adding the `0x80000000` reg entry, and naming it `ledbuff`. Hopefully, future kernel revisions won't require crazy updates to this.
 
 ## Building

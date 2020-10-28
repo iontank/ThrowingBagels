@@ -67,3 +67,12 @@ To build your own application running on the BeagleBone, you must include two fi
 
 From there, you need to flatten your frames into a stripwise structure, e.g. you should be able to access individual pixels using `fb[(y*w)+x]` (that access the pixel at the given x/y coordinate in a 1D version of your framebuffer). See [modes.h](src/demos/modes.h) for examples.
 
+The key methods you'll use are:
+
+* `strip_config* leds_config(char const * filename)`: load a config file and return the strip config
+* `int leds_init(strip_config *cfg)`: give a strip config, this connects to the PRU shared memory. Returns `1` on success, `0` on failure
+* `void leds_draw(strip_config * cfg, const void * const frame)`: draws `frame` data to the LEDs. This needs to follow the specification above, and must be `width*height*4` bytes. This will flush the contents of the frame to the LEDs for display
+* `void leds_wait(strip_config * cfg)`: wait for the LEDs to draw. You never *need* to call this, as the PRU is almost certainly flushing the data faster than your program is generating it, but *just* in case
+* `void leds_close(strip_config * cfg)`: releases our hold on the PRU shared memory.
+
+See [ledstrips.h](src/ledscape/ledstrips.h) for more details.

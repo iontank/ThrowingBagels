@@ -62,5 +62,6 @@ int main(int argc, char ** argv) {
   }
   fill_color(fb, 0, cfg);
   leds_draw(cfg, fb);
+  leds_close(cfg);
   return 0;
 }

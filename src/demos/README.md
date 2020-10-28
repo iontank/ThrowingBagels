@@ -6,6 +6,11 @@ A collection of demo programs useful for testing/diagnosing/debugging LEDs
 
 To run from the ThrowingBagels install dir: `./launcher bin/smoke`
 
+## Color
+`color` sets the LEDs to a solid color, supplied on the command line. Obeys your `leds.config` file. 
+
+To run from the ThrowingBagels install dir: `./launcher bin/color 0xFF0000` (or any hex triplet).
+
 ## Multidemo
 `multidemo` is a much more complex demo program, suitable for making full hardware testbeds. It supports a huge number of configuration flags. Run `bin/multidemo --help` for more info.
 
