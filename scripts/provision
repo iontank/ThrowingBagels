@@ -2,7 +2,7 @@
 kern=`uname -r`
 echo "Your kernel is ${kern}. This installer works for 4.19 kernels."
 read -p "Press [Enter] to provision this Bagelbox for network rendering."
-echo "What hostname would you like this Bagelbox to use? "
+echo "What hostname would you like this Bagelbox to use? (leave blank to leave unchanged) "
 read -p "[HOST] > "  hostval
 echo "What is the LED config as:"
 read -p "[WIDTH] > " w
@@ -28,7 +28,7 @@ esac
 
 if [[ $h -gt 512 ]]
 then
-  echo "Too many leds per channel- 512 is thee max. No changes have beeen made."
+  echo "Too many leds per channel- 512 is the max. No changes have beeen made."
   exit
 fi
 
@@ -48,20 +48,3 @@ else
   echo "Setting leds.config to $w,$h,$b"
   echo "$w,$h,$b" > leds.config
 fi
-
-echo "Installing the bagel uBoot config."
-sudo sed -i.bak "s/#disable_uboot_overlay_video=1/disable_uboot_overlay_video=1/g" /boot/uEnv.txt
-sudo sed -i.bak "s/#disable_uboot_overlay_audio=1/disable_uboot_overlay_audio=1/g" /boot/uEnv.txt
-
-echo "Updating the device tree."
-sudo cp dts/*.dtbo /lib/firmware
-
-echo "This script assumes that your uEnv.txt enables the PRU, which should be the default. Ensure that a uboot_overlay_pru is set."
-echo "If not, manually change it."
-
-echo "Installing services"
-sudo scripts/setup_services
-
-echo "Throwing Bagels has been installed. Services are installed, but not enabled. Check the READMe for more."
-echo "Please reboot before trying the included software."
-echo "After a reboot, you can use systemctl to enable/start either multidemo or led-udp"
