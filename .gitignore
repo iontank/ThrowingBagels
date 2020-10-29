@@ -4,3 +4,7 @@ obj/*
 bin/*
 lib/*
 gen/*
+*.s#*
+*.b#*
+*.l#*
+.Ds_Store
