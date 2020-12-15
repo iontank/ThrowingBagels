@@ -20,10 +20,11 @@
   .asg 14, CMD
   .asg 15, RESP
   .asg 16, CHANNELS
-  .asg 17, FRAME ;we start the frame just RIGHT AFTER 
-                  ; the command struct
-
-
+  .asg 0x10011, FRAME ;we start the frame by skipping
+                      ;over a suspicious range
+                      ; I don't know what's in there,
+                      ; but if I touch it it crashes
+  
   ;registers for storing important values
   .asg r4.b0, command
   .asg r4.w1, npixels

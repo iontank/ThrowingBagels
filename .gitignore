@@ -8,3 +8,4 @@ gen/*
 *.b#*
 *.l#*
 .Ds_Store
+.vscode-ctags

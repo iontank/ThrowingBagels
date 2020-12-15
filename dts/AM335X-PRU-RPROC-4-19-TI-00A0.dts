@@ -40,7 +40,9 @@
         ledbuff: ledmem@80000000 {
           #address-cells = <1>;
           #size-cells = <1>;
-          reg = <0x80000000 0x100000>;
+          compatible = "shared-dma-pool";
+          reg = <0x80000000 0x200000>;
+          no-map;
         };
       };
 
@@ -61,7 +63,7 @@
             reg = <0x4a300000 0x2000>,
                   <0x4a302000 0x2000>,
                   <0x4a310000 0x3000>,
-                  <0x80000000 0x100000>;
+                  <0x80000000 0x200000>;
             reg-names = "dram0",
                   "dram1",
                   "dram2",
@@ -73,7 +75,7 @@
           pruss: pruss@4a300000 {
             compatible = "ti,am3356-pruss";
             reg = <0x4a300000 0x80000>,
-                  <0x4a314000 0x100000>;
+                  <0x4a314000 0x200000>;
             interrupts = <20 21 22 23 24 25 26 27>;
             interrupt-names = "host2", "host3", "host4",
                   "host5", "host6", "host7",

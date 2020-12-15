@@ -30,6 +30,10 @@
 #define STRIP_NUM_CHANNELS 32
 //the memory location of the PRUs memory
 #define STRIP_BASE_MEM 0x80000000
+//something is using about 32k of memory in the area we want
+//to use, so we have to skip over that, and we don't know
+//EXACTLY where it is, so we need a big skip
+#define STRIP_HOP 0x10000
 //the amount of memory we want to reserve, which is more than we
 //reasonably plan to use
 #define STRIP_MEM_SIZE 132072

@@ -35,7 +35,7 @@ fail_exit:
 
 int leds_init(strip_config *cfg) {
   //create a memory map large enough fro a frame buffer and command info
-  size_t map_size = STRIP_MEM_SIZE; //big ol' pile of memory
+  size_t map_size = STRIP_MEM_SIZE + STRIP_HOP; //big ol' pile of memory
   off_t target = STRIP_BASE_MEM;
   off_t pa_target = target & ~(sysconf(_SC_PAGE_SIZE) - 1); //page aligned target
   void *map_base;
@@ -50,7 +50,7 @@ int leds_init(strip_config *cfg) {
     fprintf(stderr,"The firmware isn't in a state to receive commands. Ensure it's loaded and no other programs are trying to talk to it.");
     return 0;
   }
-  ptr->pixels_dma = cfg->base_addr + sizeof(led_command);
+  ptr->pixels_dma = cfg->base_addr + sizeof(led_command) + STRIP_HOP;
   close(fd);
   return 1;
 }
