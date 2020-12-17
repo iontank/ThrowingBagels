@@ -57,8 +57,10 @@ int main(int argc, char ** argv) {
   uint32_t * fb = calloc(cfg->leds_width*cfg->leds_height, sizeof(uint32_t));
   fill_color(fb, color, cfg);
   leds_draw(cfg, fb);
+  led_command *cmd = cfg->base_addr;
   while(running) {
     sleep(1);
+    leds_draw(cfg, fb);
   }
   fill_color(fb, 0, cfg);
   leds_draw(cfg, fb);

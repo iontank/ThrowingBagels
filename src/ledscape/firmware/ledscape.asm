@@ -20,7 +20,7 @@
   .asg 14, CMD
   .asg 15, RESP
   .asg 16, CHANNELS
-  .asg 0x10011, FRAME ;we start the frame by skipping
+  .asg 0x80010000, FRAME ;we start the frame by skipping
                       ;over a suspicious range
                       ; I don't know what's in there,
                       ; but if I touch it it crashes
@@ -237,9 +237,7 @@ _LOOP:
 RGB_ONLY:
   ADD     length, r2, npixels
 
-  LDI32   pixels, 0x80000000+FRAME ;currently hard-coding the address
-                  ;above is the C31 constant table pointer
-                  ;I just have no idea how to get it out
+  LDI32   pixels, FRAME ; frame starts someplace above 
 
 FRAME_LOOP:
   DB G0, 4

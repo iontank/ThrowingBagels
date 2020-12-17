@@ -44,13 +44,13 @@ int leds_init(strip_config *cfg) {
   if ((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1) return 0;
   map_base = mmap(0, map_size + target - pa_target, PROT_READ | PROT_WRITE, MAP_SHARED, fd, pa_target);
   cfg->base_addr = map_base + target - pa_target;
-  mlock(cfg->base_addr, map_size);
   led_command *ptr = cfg->base_addr;
   if (ptr->debug0 != 2) {
     fprintf(stderr,"The firmware isn't in a state to receive commands. Ensure it's loaded and no other programs are trying to talk to it.");
     return 0;
   }
-  ptr->pixels_dma = cfg->base_addr + sizeof(led_command) + STRIP_HOP;
+  ptr->pixels_dma = &cfg->base_addr[STRIP_HOP];
+  memset(ptr->pixels_dma, 0, STRIP_MEM_SIZE);
   close(fd);
   return 1;
 }
@@ -84,6 +84,5 @@ void leds_wait(strip_config * cfg) {
 }
 
 void leds_close(strip_config * cfg) {
-  munlockall();
   munmap(cfg->base_addr, STRIP_MEM_SIZE);
 }
