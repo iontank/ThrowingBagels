@@ -45,7 +45,7 @@
   .asg r0, t0
   .asg r1, t1
   .asg r2, t2
-  .asg r31, t3
+  .asg r19, t3
   .asg r4, sleeper
   .asg r6, t6
 

@@ -1,5 +1,5 @@
     ; we use 32 register bytes as scratch
-  ; so r11-r19
+  ; so r11-r18
   .asg r11, scratch
 
   .asg r26, gpio0_mask
