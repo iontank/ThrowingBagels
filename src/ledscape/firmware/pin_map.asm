@@ -101,101 +101,101 @@
   .asg 0, c15_gpio
   .asg gpio0_mask, c15_gpio_mask
   .asg 31, c15_pin
-  .asg r15.b3, c15_byte
+  .asg r14.b3, c15_byte
   SET c15_gpio_mask, c15_gpio_mask, c15_pin
   ; 16
   .asg 1, c16_gpio
   .asg gpio1_mask, c16_gpio_mask
   .asg 18, c16_pin
-  .asg r16.b0, c16_byte
+  .asg r15.b0, c16_byte
   SET c16_gpio_mask, c16_gpio_mask, c16_pin
   ; 17
   .asg 2, c17_gpio
   .asg gpio2_mask, c17_gpio_mask
   .asg 25, c17_pin
-  .asg r16.b1, c17_byte
+  .asg r15.b1, c17_byte
   SET c17_gpio_mask, c17_gpio_mask, c17_pin
   ; 18
   .asg 1, c18_gpio
   .asg gpio1_mask, c18_gpio_mask
   .asg 19, c18_pin
-  .asg r16.b2, c18_byte
+  .asg r15.b2, c18_byte
   SET c18_gpio_mask, c18_gpio_mask, c18_pin
   ; 19
   .asg 0, c19_gpio
   .asg gpio0_mask, c19_gpio_mask
   .asg 5, c19_pin
-  .asg r16.b3, c19_byte
+  .asg r15.b3, c19_byte
   SET c19_gpio_mask, c19_gpio_mask, c19_pin
   ; 20
   .asg 0, c20_gpio
   .asg gpio0_mask, c20_gpio_mask
   .asg 4, c20_pin
-  .asg r17.b0, c20_byte
+  .asg r16.b0, c20_byte
   SET c20_gpio_mask, c20_gpio_mask, c20_pin
   ; 21
   .asg 2, c21_gpio
   .asg gpio2_mask, c21_gpio_mask
   .asg 24, c21_pin
-  .asg r17.b1, c21_byte
+  .asg r16.b1, c21_byte
   SET c21_gpio_mask, c21_gpio_mask, c21_pin
   ; 22
   .asg 2, c22_gpio
   .asg gpio2_mask, c22_gpio_mask
   .asg 22, c22_pin
-  .asg r17.b2, c22_byte
+  .asg r16.b2, c22_byte
   SET c22_gpio_mask, c22_gpio_mask, c22_pin
   ; 23
   .asg 0, c23_gpio
   .asg gpio0_mask, c23_gpio_mask
   .asg 3, c23_pin
-  .asg r17.b3, c23_byte
+  .asg r16.b3, c23_byte
   SET c23_gpio_mask, c23_gpio_mask, c23_pin
   ; 24
   .asg 0, c24_gpio
   .asg gpio0_mask, c24_gpio_mask
   .asg 2, c24_pin
-  .asg r18.b0, c24_byte
+  .asg r17.b0, c24_byte
   SET c24_gpio_mask, c24_gpio_mask, c24_pin
   ; 25
   .asg 1, c25_gpio
   .asg gpio1_mask, c25_gpio_mask
   .asg 17, c25_pin
-  .asg r18.b1, c25_byte
+  .asg r17.b1, c25_byte
   SET c25_gpio_mask, c25_gpio_mask, c25_pin
   ; 26
   .asg 0, c26_gpio
   .asg gpio0_mask, c26_gpio_mask
   .asg 15, c26_pin
-  .asg r18.b2, c26_byte
+  .asg r17.b2, c26_byte
   SET c26_gpio_mask, c26_gpio_mask, c26_pin
   ; 27
   .asg 3, c27_gpio
   .asg gpio3_mask, c27_gpio_mask
   .asg 21, c27_pin
-  .asg r18.b3, c27_byte
+  .asg r17.b3, c27_byte
   SET c27_gpio_mask, c27_gpio_mask, c27_pin
   ; 28
   .asg 0, c28_gpio
   .asg gpio0_mask, c28_gpio_mask
   .asg 14, c28_pin
-  .asg r19.b0, c28_byte
+  .asg r18.b0, c28_byte
   SET c28_gpio_mask, c28_gpio_mask, c28_pin
   ; 29
   .asg 3, c29_gpio
   .asg gpio3_mask, c29_gpio_mask
   .asg 19, c29_pin
-  .asg r19.b1, c29_byte
+  .asg r18.b1, c29_byte
   SET c29_gpio_mask, c29_gpio_mask, c29_pin
   ; 30
   .asg 3, c30_gpio
   .asg gpio3_mask, c30_gpio_mask
   .asg 16, c30_pin
-  .asg r19.b2, c30_byte
+  .asg r18.b2, c30_byte
   SET c30_gpio_mask, c30_gpio_mask, c30_pin
   ; 31
   .asg 0, c31_gpio
   .asg gpio0_mask, c31_gpio_mask
   .asg 20, c31_pin
-  .asg r19.b3, c31_byte
+  .asg r18.b3, c31_byte
   SET c31_gpio_mask, c31_gpio_mask, c31_pin
