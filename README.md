@@ -3,7 +3,14 @@
 
 You can use ThrowingBagels to drive up to 32 channels of individual LED strips, up to 512 LEDs per channel. This should work on any BeagleBone Black, running Debian Buster.
 
-**TODO**: example PCB will be included
+## What's it For?
+
+Like we said, you can drive up to 32 channels of individual LED strips, up to 512 LEDs per channel. We've used versions of this software do build things like:
+
+<img src="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-9/116045555_3325317597554891_4327759825400826384_o.jpg?_nc_cat=109&ccb=2&_nc_sid=730e14&_nc_ohc=aKF5Na3_B4MAX-WHwRL&_nc_ht=scontent-iad3-1.xx&oh=0873e2bcc1b90285b050cad9387dc257&oe=601E9460" alt="A glowing chandelier shaped like DNA"><br>
+<img src="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-9/58647137_2324273157659345_6396779893861908480_o.jpg?_nc_cat=107&ccb=2&_nc_sid=730e14&_nc_ohc=-8iVCu1GFMUAX87Duey&_nc_oc=AQkxYJ004FSru7iFLA0ndSbRETY3FdgqJMQmmNeY7NA0zjADilf0o4iLe0weGxVQGwg&_nc_ht=scontent-iad3-1.xx&oh=905f29edce7cdd55c952dbce3844a83c&oe=601D32A7" alt="glowing wooden ribs of light in a hallway"><br>
+<img src="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-9/53599035_2247262275360434_2253813556346617856_o.jpg?_nc_cat=102&ccb=2&_nc_sid=730e14&_nc_ohc=xiAvPQfi2TMAX8r0f9K&_nc_ht=scontent-iad3-1.xx&oh=5340423ff10356f8e52074a12ba6b3e4&oe=601E7726" alt="glowing stars in a ceiling"><br>
+If you want LEDs to blink pretty, this gives you a powerful way to control them.
 
 ## Installing
 `curl https://raw.githubusercontent.com/Iontank/ThrowingBagels/install.sh | bash`
