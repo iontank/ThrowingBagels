@@ -1,6 +1,6 @@
 # Simple Frame Sender
 
-This is a simple Python-based Frame Sender. It should be compatible with all Python versions 2.7+ (though we have only tested on 3.6+, it's a demo program, don't get greedy). It depends on NumPy and nothing else.
+This is a simple Python-based Frame Sender. It should be compatible with all Python versions 2.7+ (tested on 2.7.16, 2.7.17, 3.7.3; it's a demo program, don't get greedy). It depends on NumPy and nothing else.
 
 ## Running
 `python color.py color.json --speed 4`

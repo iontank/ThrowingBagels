@@ -19,9 +19,17 @@ def packetize(frame):
   return (p1, p2)
 
 class BagelThrower:
-  def __init__(self, configDict:dict):
+  def __init__(self, configDict):
     self.cfg = configDict
     self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    print("Sending LED data.")
+    for target in self.cfg["targets"]:
+      x = target["x"]
+      y = target["y"]
+      w = target["w"]
+      h = target["h"]
+      hostname = target["hostname"]
+      print("Target: %s. x:%i y:%i - w%i x h%i" % (hostname, x, y, w, h))
   
   def get_frame_buffer(self):
     return np.zeros((
@@ -43,5 +51,5 @@ class BagelThrower:
         for p in packets:
           self.sock.sendto(bytearray(p.astype(np.uint8)), addr)
       except:
-        print(f"Failed to send to {addr}")
+        print("Failed to send to %s" % (addr,))
 

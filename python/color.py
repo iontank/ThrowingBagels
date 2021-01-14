@@ -34,4 +34,3 @@ while True:
   thrower.send_frame(frame)
   sleep(frame_dur)
   hue += frame_dur/speed
-  
