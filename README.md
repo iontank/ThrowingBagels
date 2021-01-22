@@ -52,7 +52,7 @@ For the purposes of testing, iterating, and diagnosing hardware issues, there ar
 * `bin/multidemo`(`src/demos/multidemo.c`): a complex and highly configurable suite of animations which run right on the BeagleBone, useful for demonstrating lighting effects without network connectivity. Great "pitch tool" to prove hardware concepts.
 
 ### LED UDP RX
-The primary application, and what drives the core use-case of this software stack, is the `bin/led-udp-rx` tool (`src/net/udp-rx.c`). This tool listens on a port (default: `9999`) for frame data. This allows a powerful "render machine" to run elsewhere on the network, and send frame data to an arbitrary number of ThrowingBagels instances.
+The primary application, and what drives the core use-case of this software stack, is the `bin/led-udp-rx` tool (`src/net/udp-rx.c`). This tool listens on a port (default: `9999`) for frame data. This allows a powerful "render machine" to run elsewhere on the network, and send frame data to an arbitrary number of ThrowingBagels instances. See [LED UDP RX](src/net/README.md) for more details.
 
 ## Running
 Included is a `launcher` script. This script configures the GPIO, deploys the firmware, and then, optionally, launches a requested binary. E.g., `./launcher bin/led-udp-rx`, would launch the LED UDP RX tool on port 9999, using `leds.config` as the source for our led configuration.
@@ -83,3 +83,6 @@ The key methods you'll use are:
 * `void leds_close(strip_config * cfg)`: releases our hold on the PRU shared memory.
 
 See [ledstrips.h](src/ledscape/ledstrips.h) for more details.
+
+# ThrowingBagels Hardware
+Running the software is useless if you can't plug LEDs into it. A reference design for a board [is included](pcb/README.md). It is based on designs we've used in our installations, but is strictly a *reference* design.
