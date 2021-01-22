@@ -1,6 +1,6 @@
 # Demo Board
 
-![Demo Board](pcb/throwing_bagels.png)
+![Demo Board](throwing_bagels.png)
 
 Included in this folder is a demo board designed in Eagle. It is very impractical, and includes a library of parts. It has not been ordered and tested, so no promises. This is to illustrate pinout, and how we might use this on the hardware side.
 
