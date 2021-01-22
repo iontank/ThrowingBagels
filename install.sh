@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sudo git clone https://rna.iontank.com/iontank/blinkyblink /opt/ThrowingBagels #todo: replace this with the public repo URL
+sudo git clone https://github.com/iontank/ThrowingBagels.git /opt/ThrowingBagels
 USER=$(whoami)
 sudo chown -R $USER /opt/ThrowingBagels
 cd /opt/ThrowingBagels
