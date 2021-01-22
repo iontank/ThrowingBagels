@@ -1,7 +1,7 @@
 # ThrowingBagels
 **ThrowingBagels** is a modernization of the [LEDScape](https://github.com/osresearch/LEDscape) software package. ThrowingBagels a LED driver software package for the ~~bagelbone~~ BeagleBone Black, which drives LEDs from UDP packets you yeet at it over the network, or from your own custom software.
 
-You can use ThrowingBagels to drive up to 32 channels of individual LED strips, up to 512 LEDs per channel. This should work on any BeagleBone Black, running Debian Buster.
+You can use ThrowingBagels to drive up to 32 channels of individual LED strips, up to 512 LEDs per channel. Any addressable LEDs that support the WS or SK control protocols should work (WS2812, SK6812, mainly). This should work on any BeagleBone Black, running Debian Buster. 
 
 ## What's it For?
 
