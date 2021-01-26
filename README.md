@@ -13,7 +13,7 @@ Like we said, you can drive up to 32 channels of individual LED strips, up to 51
 If you want LEDs to blink pretty, this gives you a powerful way to control them. All images above via [Iontank](https://www.facebook.com/Iontank)'s Facebook. See also the [Iontank website](http://iontank.com).
 
 ## Installing
-`curl https://raw.githubusercontent.com/Iontank/ThrowingBagels/install.sh | bash`
+`curl https://raw.githubusercontent.com/iontank/ThrowingBagels/master/install.sh | bash`
 
 This script will:
 
