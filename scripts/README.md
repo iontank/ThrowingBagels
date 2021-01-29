@@ -7,3 +7,4 @@ These are utility scripts which are used as part of the setup process.
 * sane-pins: a utility script useful for debugging; it ensures your `pin_layout.txt` accurately maps physical headers to kernel IDs
 * setup-services: installs the service definition files
 * uEnv.txt: an example of what your uEnv.txt should look like. Not actually used as anything but reference.
+* cleanup: remove node red, cloud9, and install a zeroconf broadcaster.
