@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 sudo git clone https://github.com/iontank/ThrowingBagels.git /opt/ThrowingBagels
 USER=$(whoami)
+
+echo -e "\n\nInstalling ThrowingBagels\n\n"
+
 sudo chown -R $USER /opt/ThrowingBagels
 cd /opt/ThrowingBagels
 make
@@ -17,6 +20,8 @@ echo "If not, manually change it."
 
 echo "Installing services"
 sudo scripts/setup_services
+
+echo -e "\nThrowingBagels installed\n\n"
 
 echo "Throwing Bagels has been installed. Services are installed, but not enabled. Check the READMe for more."
 echo "Please reboot before trying the included software."

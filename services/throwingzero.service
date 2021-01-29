@@ -1,0 +1,11 @@
+[Unit]
+Description=Throwing Bagels Zeroconf Identifier
+After=proc-sys-fs-binfmt_misc.automount
+
+[Service]
+WorkingDirectory=/opt/ThrowingBagels/
+ExecStart=python3 python/zeroconf_service.py
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target

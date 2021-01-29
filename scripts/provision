@@ -5,9 +5,9 @@ read -p "Press [Enter] to provision this Bagelbox for network rendering."
 echo "What hostname would you like this Bagelbox to use? (leave blank to leave unchanged) "
 read -p "[HOST] > "  hostval
 echo "What is the LED config as:"
-read -p "[WIDTH] > " w
-read -p "[HEIGHT] > " h
-read -p "[BYTES] > " b
+read -p "[WIDTH](Max: 32) > " w
+read -p "[HEIGHT](Max: 512) > " h
+read -p "[BYTES](RGB:3, RGBW:4) > " b
 
 if [[ $w -gt 32 ]]
 then
