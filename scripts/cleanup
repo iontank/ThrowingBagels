@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-sudo apt-get remove -y bb-node-red-installer
-sudo apt-get remove -y c9-core-installer
+sudo apt-get remove -y bb-node-red-installer --allow-change-held-packages
+sudo apt-get remove -y c9-core-installer --allow-change-held-packages
 
 sudo python3 -m pip install zeroconf
 
