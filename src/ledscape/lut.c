@@ -17,16 +17,6 @@ uint32_t apply_gamma_lut(uint32_t c)
   return (r << 16) | (g << 8) | (b);  
 }
 
-uint8_t saturation(uint8_t r, uint8_t g, uint8_t b) {
-  float low = MIN(r, MIN(g, b));
-  float high = MAX(r, MAX(g, b));
-  return (uint8_t)roundf(100 * ((high - low) / high));
-}
-
-uint8_t white(uint8_t r, uint8_t g, uint8_t b) {
-  return (0xFF - saturation(r,g,b)) / 0xFF * (r + g + b) / 3;
-}
-
 /* Convert RGB to RGBW data */
 uint32_t rgb_to_rgbw(uint8_t in_r, uint8_t in_g, uint8_t in_b) 
 {
@@ -34,8 +24,8 @@ uint32_t rgb_to_rgbw(uint8_t in_r, uint8_t in_g, uint8_t in_b)
   r = LUT(in_r);
   g = LUT(in_g);
   b = LUT(in_b);
-  uint8_t w = white(r,g,b);
-  return (w << 24) | (r << 16) | (g << 8) | b;
+  uint8_t w = MIN(r,MIN(g,b));
+  return (w << 24) | ((r-w) << 16) | ((g-w) << 8) | (b-w);
 }
 
 uint32_t apply_rgbw_lut(uint32_t pixel) {
