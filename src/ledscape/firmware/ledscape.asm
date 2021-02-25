@@ -39,7 +39,7 @@
 
   .asg r24, channel_loop
   .asg r25, bit_loop
-  .asg r30, bytes
+  .asg r21, bytes
 
   ; aliases registers usable as temp values
   .asg r0, t0
@@ -240,18 +240,13 @@ RGB_ONLY:
   LDI32   pixels, FRAME ; frame starts someplace above 
 
 FRAME_LOOP:
-  DB G0, 4
+  RESET_CLOCK
   ;load 32 bytes from our input
   LBBO    &scratch, pixels, 0, 32
   LDI32   bit_loop, 8
 
 BIT_LOOP:
   SUB     bit_loop, bit_loop, 1
-
-  RESET_CLOCK
-
-  READ_TIME sleeper ;track the time at which we start signalling
-                    ;waits will be relative to this
 
   ; fill the output buffers
   LDI32   gpio0_zeros, 0
@@ -260,6 +255,7 @@ BIT_LOOP:
   LDI32   gpio3_zeros, 0
 
   ;parse the input values into the output data
+  ;building this output takes about 300ns
   SET_OUTPUT_BIT bit_loop, 0
   SET_OUTPUT_BIT bit_loop, 1
   SET_OUTPUT_BIT bit_loop, 2
@@ -299,8 +295,8 @@ BIT_LOOP:
   LDI32 t2, GPIO2 | GPIO_SETDATAOUT
   LDI32 t3, GPIO3 | GPIO_SETDATAOUT
 
-  WAITNS BASE_WAIT ;we start waiting a bit at the top of the loop
-              ; this is to ensure we hold low long enough between bits
+  READ_TIME sleeper ;track the time at which we start signalling
+                  ;waits will be relative to this
 
   ;send HIGH for all the pins we control
   SBBO    &gpio0_mask, t0, 0, 4
@@ -314,21 +310,22 @@ BIT_LOOP:
   LDI32 t2, GPIO2 | GPIO_CLEARDATAOUT
   LDI32 t3, GPIO3 | GPIO_CLEARDATAOUT
 
-  WAITNS BASE_WAIT + 200
+  WAITNS 300
   ; set low for the pins that are sending 0
   SBBO    &gpio0_zeros, t0, 0, 4
   SBBO    &gpio1_zeros, t1, 0, 4
   SBBO    &gpio2_zeros, t2, 0, 4
   SBBO    &gpio3_zeros, t3, 0, 4
 
-  WAITNS  BASE_WAIT + 600
-  READ_TIME sleeper 
+  WAITNS  600
 
   ;set low for all the pins we control
   SBBO    &gpio0_mask, t0, 0, 4
   SBBO    &gpio1_mask, t1, 0, 4
   SBBO    &gpio2_mask, t2, 0, 4
   SBBO    &gpio3_mask, t3, 0, 4
+
+  WAITNS 900
 
   QBNE BIT_LOOP, bit_loop, 0 ;back to the bit loop
 

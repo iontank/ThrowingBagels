@@ -20,7 +20,7 @@
 
 #include "gamma8.h"
 
-#define IDLE_MODE(buf,cfg,tick) sinusoidal(buf, tick, cfg, 0xFF00FF, 0x00FFFF, 0.34, 50.0)
+#define IDLE_MODE(buf,cfg,tick) fill_color(buf, 0x0, cfg)
 
 static int
 udp_socket(
