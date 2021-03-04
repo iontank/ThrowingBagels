@@ -20,7 +20,7 @@
 
 #include "gamma8.h"
 
-#define IDLE_MODE(buf,cfg,tick) fill_color(buf, 0x0, cfg)
+#define IDLE_MODE(buf,cfg,tick) fill_color(buf, 0x222222, cfg)
 
 static int
 udp_socket(
@@ -48,7 +48,7 @@ wait_socket(
 	int msec_timeout
 )
 {
-	struct timeval tv = { msec_timeout / 1000, msec_timeout % 1000 };
+	struct timeval tv = { msec_timeout / 1000, (msec_timeout % 1000) * 100 };
 	fd_set fds;
 	FD_ZERO(&fds);
 	FD_SET(fd, &fds);
@@ -141,7 +141,7 @@ int main_loop(strip_config * cfg, int sock, int timeout) {
       leds_draw(cfg, frame_buf);
       leds_wait(cfg);
       clock += 0.0250;
-      t_val = 250;
+      t_val = 500;
       continue;
     }
     t_val = timeout;

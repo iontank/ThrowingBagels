@@ -33,14 +33,12 @@ fail_exit:
   return NULL;
 }
 
-int leds_init(strip_config *cfg) {
-  //create a memory map large enough fro a frame buffer and command info
-  size_t map_size = STRIP_MEM_SIZE + STRIP_HOP; //big ol' pile of memory
-  off_t target = STRIP_BASE_MEM;
-  off_t pa_target = target & ~(sysconf(_SC_PAGE_SIZE) - 1); //page aligned target
+int command_init(strip_config *cfg) {
+  size_t map_size = sizeof(led_command);
+  off_t target = COMMAND_BASE_MEM;
+  off_t pa_target = target & ~(sysconf(_SC_PAGE_SIZE) - 1);
   void *map_base;
   int fd;
-  //open memory
   if ((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1) return 0;
   map_base = mmap(0, map_size + target - pa_target, PROT_READ | PROT_WRITE, MAP_SHARED, fd, pa_target);
   cfg->base_addr = map_base + target - pa_target;
@@ -49,9 +47,38 @@ int leds_init(strip_config *cfg) {
     fprintf(stderr,"The firmware isn't in a state to receive commands. Ensure it's loaded and no other programs are trying to talk to it.");
     return 0;
   }
-  ptr->pixels_dma = &cfg->base_addr[STRIP_HOP];
-  memset(ptr->pixels_dma, 0, STRIP_MEM_SIZE);
   close(fd);
+  return 1;
+}
+
+int framebuffer_init(strip_config *cfg) {
+  led_command *ptr = cfg->base_addr;
+  size_t map_size = STRIP_MEM_SIZE;
+  off_t target = STRIP_BASE_MEM;
+  off_t pa_target = target & ~(sysconf(_SC_PAGE_SIZE) - 1); //page aligned target
+  void *map_base;
+  int fd;
+  //open memory
+  if ((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1) return 0;
+  map_base = mmap(0, map_size + target - pa_target, PROT_READ | PROT_WRITE, MAP_SHARED, fd, pa_target);
+  ptr->pixels_dma = map_base + target - pa_target;
+  memset(ptr->pixels_dma, 0, map_size);
+  close(fd);
+  return 1;
+}
+
+int leds_init(strip_config *cfg) {
+  if (command_init(cfg) == 0) {
+    return 0;
+  };
+  if (framebuffer_init(cfg) == 0) {
+    return 0;
+  };
+  led_command *ptr = cfg->base_addr;
+  if (ptr->debug0 != 2) {
+    fprintf(stderr,"The firmware isn't in a state to receive commands. Ensure it's loaded and no other programs are trying to talk to it.");
+    return 0;
+  }
   return 1;
 }
 
@@ -84,5 +111,7 @@ void leds_wait(strip_config * cfg) {
 }
 
 void leds_close(strip_config * cfg) {
-  munmap(cfg->base_addr, STRIP_MEM_SIZE);
+  led_command *cmd = cfg->base_addr;
+  munmap(cmd->pixels_dma, STRIP_MEM_SIZE);
+  munmap(cfg->base_addr, sizeof(led_command));
 }

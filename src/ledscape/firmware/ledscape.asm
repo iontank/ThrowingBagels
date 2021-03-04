@@ -20,10 +20,8 @@
   .asg 14, CMD
   .asg 15, RESP
   .asg 16, CHANNELS
-  .asg 0x80010000, FRAME ;we start the frame by skipping
-                      ;over a suspicious range
-                      ; I don't know what's in there,
-                      ; but if I touch it it crashes
+  .asg 0x0, FRAME ;we're going to use up to 28k 
+                  ; 8k for PRU0, 8k normally for PRU1, and 12k of shared RAM
   
   ;registers for storing important values
   .asg r4.b0, command
@@ -62,8 +60,7 @@
   .asg 0x194, GPIO_SETDATAOUT
 
   .asg 0xC, CLOCK
-
-  .asg 650, BASE_WAIT
+  .asg 600, BASE_WAIT
 
 SET_OUTPUT_BIT .macro bit,channel
   .var BANK
@@ -223,6 +220,8 @@ _LOOP:
   QBEQ    _LOOP, command, 0 ; loop if we haven't gotten a command
   QBEQ    _EXIT, command, 0xFF ;exit on 255
 
+  RESET_CLOCK
+
   DB G0, 3 ; we've gotten a command
 
   DATA_RECVD
@@ -237,10 +236,9 @@ _LOOP:
 RGB_ONLY:
   ADD     length, r2, npixels
 
-  LDI32   pixels, FRAME ; frame starts someplace above 
-
+  LDI32   pixels, FRAME ; frame marks the start in PRU RAM
+  READ_TIME   sleeper
 FRAME_LOOP:
-  RESET_CLOCK
   ;load 32 bytes from our input
   LBBO    &scratch, pixels, 0, 32
   LDI32   bit_loop, 8
@@ -295,8 +293,7 @@ BIT_LOOP:
   LDI32 t2, GPIO2 | GPIO_SETDATAOUT
   LDI32 t3, GPIO3 | GPIO_SETDATAOUT
 
-  READ_TIME sleeper ;track the time at which we start signalling
-                  ;waits will be relative to this
+  WAITNS  BASE_WAIT
 
   ;send HIGH for all the pins we control
   SBBO    &gpio0_mask, t0, 0, 4
@@ -310,14 +307,14 @@ BIT_LOOP:
   LDI32 t2, GPIO2 | GPIO_CLEARDATAOUT
   LDI32 t3, GPIO3 | GPIO_CLEARDATAOUT
 
-  WAITNS 300
+  WAITNS  BASE_WAIT+300
   ; set low for the pins that are sending 0
   SBBO    &gpio0_zeros, t0, 0, 4
   SBBO    &gpio1_zeros, t1, 0, 4
   SBBO    &gpio2_zeros, t2, 0, 4
   SBBO    &gpio3_zeros, t3, 0, 4
 
-  WAITNS  600
+  WAITNS  BASE_WAIT+600
 
   ;set low for all the pins we control
   SBBO    &gpio0_mask, t0, 0, 4
@@ -325,7 +322,7 @@ BIT_LOOP:
   SBBO    &gpio2_mask, t2, 0, 4
   SBBO    &gpio3_mask, t3, 0, 4
 
-  WAITNS 900
+  READ_TIME sleeper
 
   QBNE BIT_LOOP, bit_loop, 0 ;back to the bit loop
 

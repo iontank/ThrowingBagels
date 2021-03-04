@@ -28,15 +28,13 @@
 
 //The maximum number of supported channels
 #define STRIP_NUM_CHANNELS 32
-//the memory location of the PRUs memory
-#define STRIP_BASE_MEM 0x80000000
-//something is using about 32k of memory in the area we want
-//to use, so we have to skip over that, and we don't know
-//EXACTLY where it is, so we need a big skip
-#define STRIP_HOP 0x10000
+//the memory location of the DDR we use for sending commands
+#define COMMAND_BASE_MEM 0x80000000
+//the memory location of the shared PRU ram for the framebuffer
+#define STRIP_BASE_MEM 0x4a300000
 //the amount of memory we want to reserve, which is more than we
 //reasonably plan to use
-#define STRIP_MEM_SIZE 132072
+#define STRIP_MEM_SIZE 28672
 
 typedef struct
 {
