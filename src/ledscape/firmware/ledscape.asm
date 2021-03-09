@@ -60,7 +60,7 @@
   .asg 0x194, GPIO_SETDATAOUT
 
   .asg 0xC, CLOCK
-  .asg 600, BASE_WAIT
+  .asg 550, BASE_WAIT
 
 SET_OUTPUT_BIT .macro bit,channel
   .var BANK
@@ -91,9 +91,9 @@ READ_TIME .macro reg
 ; very precise
 WAITNS .macro ns
 waitns?:
-  READ_TIME t6 ; read the elapsed cycle counter
+  LBCO &t6, C28, CLOCK, 4 ; read the elapsed cycle counter
   SUB  t6, t6, sleeper ;sleeper should store the base cycle
-  QBGT waitns?, t6, (ns)/5
+  QBGE waitns?, t6, (ns)/5
   .endm
 
 ; parse details from the command struct into register
@@ -253,7 +253,7 @@ BIT_LOOP:
   LDI32   gpio3_zeros, 0
 
   ;parse the input values into the output data
-  ;building this output takes about 300ns
+  ;building this output takes about 320ns
   SET_OUTPUT_BIT bit_loop, 0
   SET_OUTPUT_BIT bit_loop, 1
   SET_OUTPUT_BIT bit_loop, 2
@@ -333,7 +333,7 @@ BIT_LOOP:
   QBNE    FRAME_LOOP, length, 0  ;loop until we have blasted all the data
 
   ;delay for >50usec for the LEDs
-  SLEEPNS 50000, 1
+  SLEEPNS 60000, 1
 
   DATA_DONE 1
   QBA     _LOOP
