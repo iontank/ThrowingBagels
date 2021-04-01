@@ -4,6 +4,9 @@ USER=$(whoami)
 
 echo -e "\n\nInstalling ThrowingBagels\n\n"
 
+echo "Updating OS and Kernel"
+sudo scripts/update
+
 sudo chown -R $USER /opt/ThrowingBagels
 cd /opt/ThrowingBagels
 make
